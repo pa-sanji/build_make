@@ -33,7 +33,7 @@ fi
 # This function prefixes the given command with appropriate variables needed
 # for the build to be executed with RBE.
 function use_rbe() {
-  local RBE_BINARIES_DIR="prebuilts/remoteexecution-client/latest"
+  local RBE_BINARIES_DIR="prebuilts/remoteexecution-client/buildbuddyfix"
   local DOCKER_IMAGE="gcr.io/androidbuild-re-dockerimage/android-build-remoteexec-image@sha256:1eb7f64b9e17102b970bd7a1af7daaebdb01c3fb777715899ef462d6c6d01a45"
 
   # Do not set an invocation-ID and let reproxy auto-generate one.
