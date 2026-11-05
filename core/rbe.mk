@@ -29,7 +29,7 @@ ifneq ($(filter-out false,$(USE_REWRAPPER)),)
   ifdef RBE_DIR
     rbe_dir := $(RBE_DIR)
   else
-    rbe_dir := prebuilts/remoteexecution-client/live/
+    rbe_dir := prebuilts/remoteexecution-client/buildbuddyfix/
   endif
 
   ifdef RBE_CXX_POOL
@@ -78,7 +78,9 @@ ifneq ($(filter-out false,$(USE_REWRAPPER)),)
   cxx_platform := $(platform),Pool=$(cxx_pool)
   java_r8_d8_platform := $(platform),Pool=$(java_pool)
 
-  RBE_WRAPPER := $(rbe_dir)/rewrapper
+  # Some remote executors reject actions with working_directory=".".
+  # Canonicalizing the working dir helps once the client itself is patched.
+  RBE_WRAPPER := $(rbe_dir)/rewrapper -canonicalize_working_dir
   RBE_CXX := --labels=type=compile,lang=cpp,compiler=clang --env_var_allowlist=PWD --exec_strategy=$(cxx_rbe_exec_strategy) --platform=$(cxx_platform) --compare=$(cxx_compare)
 
   # Append rewrapper to existing *_WRAPPER variables so it's possible to
