@@ -1793,6 +1793,15 @@ def CollectDirToZip(directory, zfp: str):
   # Need to use absolute path, as we change current working directory when
   # running external zip binary
   zfp = os.path.abspath(zfp)
+  soong_zip = shutil.which("soong_zip")
+  if soong_zip:
+    # soong_zip compresses in parallel, zip runs on one core
+    cmd = [soong_zip, "-o", zfp, "-d", "-C", directory, "-D", directory]
+    for path in precompressed:
+      cmd += ["-s", path]
+    logger.info("Zipping with %s, %d stored entries", soong_zip, len(precompressed))
+    common.RunAndCheckOutput(cmd, verbose=False)
+    return
   with tempfile.NamedTemporaryFile(prefix="precompressed_list_") as tmpfile:
     for line in precompressed:
       tmpfile.write(line.encode() + b"\n")
