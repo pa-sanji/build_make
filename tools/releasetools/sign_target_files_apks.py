@@ -172,6 +172,10 @@ Usage:  sign_target_files_apks [flags] input_target_files output_target_files
   --apk_logging_on_success
       Whether to log output of APK signing on success. Default behavior skips
       logging output when signing an APK succeeds.
+
+  --threads <int>
+      Number of threads used to sign APKs and APEXes. Default is the number of
+      CPUs, capped at 16 to bound signapk JVM memory.
 """
 
 from __future__ import print_function
@@ -235,7 +239,7 @@ OPTIONS.allow_gsi_debug_sepolicy = False
 OPTIONS.override_apk_keys = None
 OPTIONS.override_apex_keys = None
 OPTIONS.input_tmp = None
-OPTIONS.threads = 1
+OPTIONS.threads = min(16, os.cpu_count() or 1)
 OPTIONS.apk_logging_on_success = False
 
 
